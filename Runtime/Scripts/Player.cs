@@ -4,33 +4,13 @@ namespace Textclub
 {
     public sealed class Player
     {
-
-#if UNITY_WEBGL && !UNITY_EDITOR
-        [DllImport("__Internal")]
-        private static extern string JS_getPlayerId();
-
-        [DllImport("__Internal")]
-        private static extern string JS_getIsRegistered();
-
-        [DllImport("__Internal")]
-        private static extern string JS_getPlayerValue(string key);
-
-        [DllImport("__Internal")]
-        private static extern void JS_setPlayerValue(string key, string value);
-#else
-        private string JS_getPlayerId() { Debug.Log("JS_getPlayerId"); return ""; }
-        private string JS_getIsRegistered() { Debug.Log("JS_getIsRegistered"); return ""; }
-        private string JS_getPlayerValue(string key) { Debug.Log($"JS_getPlayerValue {key}"); return ""; }
-        private void JS_setPlayerValue(string key, string value) { Debug.Log($"JS_setPlayerValue {key} | {value}"); }
-
-#endif
-        public string id => JS_getPlayerId();
+        public string id => JsBridge.GetPlayerId();
 
         public bool isRegistered
         {
             get
             {
-                var isReg = JS_getIsRegistered();
+                var isReg = JsBridge.GetIsRegistered();
                 if (bool.TryParse(isReg, out bool result))
                 {
                     return result;
@@ -47,23 +27,23 @@ namespace Textclub
 
         public string Get(string key)
         {
-            return JS_getPlayerValue(key);
+            return JsBridge.GetPlayerValue(key);
         }
 
         public T Get<T>(string key)
         {
-            var str = JS_getPlayerValue(key);
+            var str = JsBridge.GetPlayerValue(key);
             return Convert.FromString<T>(str);
         }
 
         public void Set<T>(string key, T value)
         {
-            JS_setPlayerValue(key, Convert.ToString(value));
+            JsBridge.SetPlayerValue(key, Convert.ToString(value));
         }
 
         public void Set(string key, string value)
         {
-            JS_setPlayerValue(key, value);
+            JsBridge.SetPlayerValue(key, value);
         }
     }
 }
