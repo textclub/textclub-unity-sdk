@@ -48,6 +48,17 @@ namespace Textclub
             return JS_getPlayerValue(key);
         }
 
+        public T GetPlayerValue<T>(string key)
+        {
+            var str = JS_getPlayerValue(key);
+            return Convert.FromString<T>(str);
+        }
+
+        public void SetPlayerValue<T>(string key, T value)
+        {
+            JS_setPlayerValue(key, Convert.ToString(value));
+        }
+
         public void SetPlayerValue(string key, string value)
         {
             JS_setPlayerValue(key, value);
