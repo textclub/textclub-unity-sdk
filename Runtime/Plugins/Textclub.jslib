@@ -20,4 +20,11 @@ mergeInto(LibraryManager.library, {
         window.textclubSdk.setPlayerDataVal(UTF8ToString(key), UTF8ToString(value))
     },
 
+    JS_scheduleNotification: function (options) {
+        window.textclubSdk.scheduleNotification(JSON.parse(UTF8ToString(options)));
+    },
+
+    JS_captureEvent: function (eventName, properties) {
+        window.textclubSdk.captureEvent(UTF8ToString(eventName), JSON.parse(UTF8ToString(properties)));
+    }
 });
