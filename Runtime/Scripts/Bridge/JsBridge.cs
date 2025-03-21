@@ -1,11 +1,9 @@
 using System.Runtime.InteropServices;
-using UnityEngine;
 
 namespace Textclub
 {
     internal static class JsBridge
     {
-
 #if UNITY_WEBGL && !UNITY_EDITOR
         [DllImport("__Internal")]
         private static extern string JS_getPlayerId();
@@ -40,9 +38,17 @@ namespace Textclub
 
         private static IBridgeMock _bridgeMock = new DebugBridgeMock("playerId", true);
 
-        public static void SetMock(IBridgeMock mock)
+        internal static void SetMock(IBridgeMock mock)
         {
             _bridgeMock = mock;
+        }
+
+        internal static void ClearMock(IBridgeMock mock)
+        {
+            if (_bridgeMock == mock)
+            {
+                _bridgeMock = new DebugBridgeMock("playerId", true);
+            }
         }
 
         internal static string GetPlayerId()
