@@ -25,18 +25,25 @@ namespace Textclub
         [DllImport("__Internal")]
         private static extern void JS_captureEvent(string eventName, string properties);
 #else
-        private static string JS_getPlayerId() { Debug.Log("JS_getPlayerId"); return ""; }
+        private static string JS_getPlayerId() { return _bridgeMock.playerId; }
 
-        private static string JS_getIsRegistered() { Debug.Log("JS_getIsRegistered"); return ""; }
+        private static string JS_getIsRegistered() { return _bridgeMock.isRegistered; }
 
-        private static string JS_getPlayerValue(string key) { Debug.Log($"JS_getPlayerValue {key}"); return ""; }
+        private static string JS_getPlayerValue(string key) { return _bridgeMock.GetPlayerValue(key); }
 
-        private static void JS_setPlayerValue(string key, string value) { Debug.Log($"JS_setPlayerValue {key} | {value}"); }
+        private static void JS_setPlayerValue(string key, string value) { _bridgeMock.SetPlayerValue(key, value); }
 
-        private static void JS_scheduleNotification(string options) { Debug.Log($"JS_scheduleNotification {options}"); }
+        private static void JS_scheduleNotification(string options) { _bridgeMock.ScheduleNotification(options); }
 
-        private static void JS_captureEvent(string eventName, string properties) { Debug.Log($"JS_captureEvent{eventName} {properties}"); }
+        private static void JS_captureEvent(string eventName, string properties) { _bridgeMock.CaptureEvent(eventName, properties); }
 #endif
+
+        private static IBridgeMock _bridgeMock = new DebugBridgeMock("playerId", true);
+
+        public static void SetMock(IBridgeMock mock)
+        {
+            _bridgeMock = mock;
+        }
 
         internal static string GetPlayerId()
         {
