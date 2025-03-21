@@ -21,7 +21,11 @@ mergeInto(LibraryManager.library, {
     },
 
     JS_scheduleNotification: function (options) {
-        window.textclubSdk.scheduleNotification(JSON.parse(UTF8ToString(options)));
+        let opts = JSON.parse(UTF8ToString(options));
+
+        opts.scheduledAt = new Date(opts.scheduledAt);
+
+        window.textclubSdk.scheduleNotification(opts);
     },
 
     JS_captureEvent: function (eventName, properties) {
