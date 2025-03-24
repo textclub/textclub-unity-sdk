@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Textclub
@@ -57,6 +58,16 @@ namespace Textclub
         public void ScheduleNotification(string options)
         {
             _notifications.Add(JsonUtility.FromJson<Notifications.Options>(options));
+        }
+
+        public string GetEvent(string eventName)
+        {
+            return _events.Find(e => e.key == eventName).value;
+        }
+
+        public List<string> GetNotifications()
+        {
+            return _notifications.Select(n => JsonUtility.ToJson(n)).ToList();
         }
 
         [System.Serializable]

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Textclub
 {
     public interface IBridgeMock
@@ -13,5 +15,9 @@ namespace Textclub
         void ScheduleNotification(string options);
 
         void CaptureEvent(string eventName, string properties);
+
+        string GetEvent(string eventName);
+
+        List<string> GetNotifications();
     }
 }

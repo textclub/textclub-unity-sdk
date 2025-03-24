@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Textclub
@@ -33,6 +34,16 @@ namespace Textclub
         public void SetPlayerValue(string key, string value)
         {
             Debug.Log($"[Textclub] SetPlayerValue {key} {value}");
+        }
+
+        public string GetEvent(string eventName)
+        {
+            return "";
+        }
+
+        public List<string> GetNotifications()
+        {
+            return new List<string>();
         }
     }
 }

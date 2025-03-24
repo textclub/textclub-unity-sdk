@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Textclub
@@ -22,6 +23,7 @@ namespace Textclub
 
         [DllImport("__Internal")]
         private static extern void JS_captureEvent(string eventName, string properties);
+
 #else
         private static string JS_getPlayerId() { return _bridgeMock.playerId; }
 
@@ -79,6 +81,16 @@ namespace Textclub
         internal static void CaptureEvent(string eventName, string properties)
         {
             JS_captureEvent(eventName, properties);
+        }
+
+        internal static string GetEvent(string eventName)
+        {
+            return _bridgeMock.GetEvent(eventName);
+        }
+
+        internal static List<string> GetNotifications()
+        {
+            return _bridgeMock.GetNotifications();
         }
     }
 }
