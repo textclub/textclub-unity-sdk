@@ -20,6 +20,7 @@ namespace Textclub
         public static T FromString<T>(string value)
         {
             System.Type type = typeof(T);
+            Debug.Log(type);
             return type switch
             {
                 System.Type t when t == typeof(int) => (T)(object)int.Parse(value),
@@ -28,6 +29,7 @@ namespace Textclub
                 System.Type t when t == typeof(System.Enum) => (T)System.Enum.Parse(type, value),
                 System.Type t when t == typeof(Vector3) => (T)(object)ParseVector3(value),
                 System.Type t when t == typeof(Vector2) => (T)(object)ParseVector2(value),
+                System.Type t when t == typeof(string) => (T)(object)value,
                 _ => JsonUtility.FromJson<T>(value)
             };
         }
