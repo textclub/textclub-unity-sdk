@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Tests")]
 namespace Textclub
 {
     internal static class JsBridge
