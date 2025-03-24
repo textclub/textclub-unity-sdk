@@ -10,5 +10,10 @@ namespace Textclub
         {
             JsBridge.CaptureEvent(name, JsonUtility.ToJson(properties));
         }
+
+        internal T GetEvent<T>(string name) where T : struct
+        {
+            return JsonUtility.FromJson<T>(JsBridge.GetEvent(name));
+        }
     }
 }

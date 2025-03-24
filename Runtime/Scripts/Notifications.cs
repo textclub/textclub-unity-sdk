@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Textclub
@@ -9,6 +11,12 @@ namespace Textclub
         public void ScheduleNotification(Options options)
         {
             JsBridge.ScheduleNotification(JsonUtility.ToJson(options));
+        }
+
+        internal List<Options> GetNotifications()
+        {
+            return JsBridge.GetNotifications().
+                            Select(n => JsonUtility.FromJson<Options>(n)).ToList();
         }
 
         [System.Serializable]
