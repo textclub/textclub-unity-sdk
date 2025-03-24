@@ -17,7 +17,6 @@ namespace Textclub
 
         public string isRegistered => _isRegistered.ToString();
 
-
 #if UNITY_EDITOR
         private void OnEnable()
         {
