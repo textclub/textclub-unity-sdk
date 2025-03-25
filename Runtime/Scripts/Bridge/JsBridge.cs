@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using AOT;
@@ -30,6 +31,9 @@ namespace Textclub
         private static extern void JS_testAsync(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
                                          System.Action<System.IntPtr, string> errorCallback);
 
+        [DllImport("__Internal")]
+        private static extern void JS_initSdk(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
+                                         System.Action<System.IntPtr, string> errorCallback);
 #else
         private static string JS_getPlayerId() { return _bridgeMock.playerId; }
 
@@ -45,6 +49,10 @@ namespace Textclub
 
         private static void JS_testAsync(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
                                          System.Action<System.IntPtr, string> errorCallback)
+        { successCallback(ptr); }
+
+        private static void JS_initSdk(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
+                                 System.Action<System.IntPtr, string> errorCallback)
         { successCallback(ptr); }
 
 #endif
@@ -102,6 +110,11 @@ namespace Textclub
         internal static List<string> GetNotifications()
         {
             return _bridgeMock.GetNotifications();
+        }
+
+        internal static TextclubTask Init()
+        {
+            return new TextclubTask((System.IntPtr ptr) => { JS_initSdk(ptr, HandleSuccess, HandleError); });
         }
 
         internal static TextclubTask TestAsync()

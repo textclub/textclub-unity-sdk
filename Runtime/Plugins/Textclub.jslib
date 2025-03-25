@@ -49,4 +49,5 @@ mergeInto(LibraryManager.library, {
                 {{{ makeDynCall('vii', 'errorCallback') }}} (taskPtr, marshalString(error));
             });
     }
+
 });

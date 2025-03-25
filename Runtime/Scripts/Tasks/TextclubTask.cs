@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-
 
 namespace Textclub
 {
+    [AsyncMethodBuilder(typeof(TextclubTaskBuilder))]
     public class TextclubTask
     {
 
