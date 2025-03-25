@@ -27,7 +27,8 @@ namespace Textclub
         private static extern void JS_captureEvent(string eventName, string properties);
 
         [DllImport("__Internal")]
-        private static extern void JS_testAsync(System.Action successCallback, System.Action<string> errorCallback);
+        private static extern void JS_testAsync(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
+                                         System.Action<System.IntPtr, string> errorCallback);
 
 #else
         private static string JS_getPlayerId() { return _bridgeMock.playerId; }
@@ -42,7 +43,9 @@ namespace Textclub
 
         private static void JS_captureEvent(string eventName, string properties) { _bridgeMock.CaptureEvent(eventName, properties); }
 
-        private static void JS_testAsync(System.Action successCallback, System.Action<string> errorCallback) { successCallback(); }
+        private static void JS_testAsync(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
+                                         System.Action<System.IntPtr, string> errorCallback)
+        { successCallback(ptr); }
 
 #endif
 
@@ -101,21 +104,27 @@ namespace Textclub
             return _bridgeMock.GetNotifications();
         }
 
-        internal static void TestAsync()
+        internal static TextclubTask TestAsync()
         {
-            JS_testAsync(HandleSuccess, HandleError);
+            return new TextclubTask((System.IntPtr ptr) => { JS_testAsync(ptr, HandleSuccess, HandleError); });
         }
 
-        [MonoPInvokeCallback(typeof(System.Action))]
-        public static void HandleSuccess()
+        [MonoPInvokeCallback(typeof(System.Action<System.IntPtr>))]
+        public static void HandleSuccess(System.IntPtr taskPtr)
         {
-            Debug.Log("Callback Success!");
+            GCHandle handle = GCHandle.FromIntPtr(taskPtr);
+            var task = (TextclubTask)handle.Target;
+            task.SetResult();
+            handle.Free();
         }
 
-        [MonoPInvokeCallback(typeof(System.Action<string>))]
-        public static void HandleError(string error)
+        [MonoPInvokeCallback(typeof(System.Action<System.IntPtr, string>))]
+        public static void HandleError(System.IntPtr taskPtr, string error)
         {
-            Debug.Log($"Callback Error! {error}");
+            GCHandle handle = GCHandle.FromIntPtr(taskPtr);
+            var task = (TextclubTask)handle.Target;
+            task.SetException(new System.Exception(error));
+            handle.Free();
         }
     }
 }

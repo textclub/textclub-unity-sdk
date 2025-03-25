@@ -41,12 +41,12 @@ mergeInto(LibraryManager.library, {
             });
     },
 
-    JS_testAsync: function (successCallback, errorCallback) {
+    JS_testAsync: function (taskPtr, successCallback, errorCallback) {
         new Promise(resolve => setTimeout(resolve, 1000)).then(function () {
-            {{{ makeDynCall('v', 'successCallback') }}}();
+            {{{ makeDynCall('vi', 'successCallback') }}} (taskPtr);
         })
             .catch(function (error) {
-                {{{ makeDynCall('vi', 'errorCallback') }}} (marshalString(error));
+                {{{ makeDynCall('vii', 'errorCallback') }}} (taskPtr, marshalString(error));
             });
     }
 });

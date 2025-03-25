@@ -11,9 +11,9 @@ namespace Textclub
 
         public readonly Player player = new();
 
-        public void TestAsync()
+        public TextclubTask TestAsync()
         {
-            JsBridge.TestAsync();
+            return JsBridge.TestAsync();
         }
     }
 }
