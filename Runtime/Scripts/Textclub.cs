@@ -10,5 +10,10 @@ namespace Textclub
         public readonly Analytics analytics = new();
 
         public readonly Player player = new();
+
+        public void TestAsync()
+        {
+            JsBridge.TestAsync();
+        }
     }
 }

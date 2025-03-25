@@ -30,5 +30,23 @@ mergeInto(LibraryManager.library, {
 
     JS_captureEvent: function (eventName, properties) {
         window.textclubSdk.captureEvent(UTF8ToString(eventName), JSON.parse(UTF8ToString(properties)));
+    },
+
+    JS_initSdk: function (taskPtr, successCallback, errorCallback) {
+        window.textclubSdk.isReady().then(function () {
+            {{{ makeDynCall('vi', 'successCallback') }}} (taskPtr);
+        })
+            .catch(function (error) {
+                {{{ makeDynCall('vii', 'errorCallback') }}} (taskPtr, marshalString(error));
+            });
+    },
+
+    JS_testAsync: function (successCallback, errorCallback) {
+        new Promise(resolve => setTimeout(resolve, 1000)).then(function () {
+            {{{ makeDynCall('v', 'successCallback') }}}();
+        })
+            .catch(function (error) {
+                {{{ makeDynCall('vi', 'errorCallback') }}} (marshalString(error));
+            });
     }
 });

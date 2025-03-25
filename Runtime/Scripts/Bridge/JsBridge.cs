@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using AOT;
+using UnityEngine;
 
 namespace Textclub
 {
@@ -24,6 +26,9 @@ namespace Textclub
         [DllImport("__Internal")]
         private static extern void JS_captureEvent(string eventName, string properties);
 
+        [DllImport("__Internal")]
+        private static extern void JS_testAsync(System.Action successCallback, System.Action<string> errorCallback);
+
 #else
         private static string JS_getPlayerId() { return _bridgeMock.playerId; }
 
@@ -36,6 +41,9 @@ namespace Textclub
         private static void JS_scheduleNotification(string options) { _bridgeMock.ScheduleNotification(options); }
 
         private static void JS_captureEvent(string eventName, string properties) { _bridgeMock.CaptureEvent(eventName, properties); }
+
+        private static void JS_testAsync(System.Action successCallback, System.Action<string> errorCallback) { successCallback(); }
+
 #endif
 
         private static IBridgeMock _bridgeMock = new DebugBridgeMock("playerId", true);
@@ -91,6 +99,23 @@ namespace Textclub
         internal static List<string> GetNotifications()
         {
             return _bridgeMock.GetNotifications();
+        }
+
+        internal static void TestAsync()
+        {
+            JS_testAsync(HandleSuccess, HandleError);
+        }
+
+        [MonoPInvokeCallback(typeof(System.Action))]
+        public static void HandleSuccess()
+        {
+            Debug.Log("Callback Success!");
+        }
+
+        [MonoPInvokeCallback(typeof(System.Action<string>))]
+        public static void HandleError(string error)
+        {
+            Debug.Log($"Callback Error! {error}");
         }
     }
 }
