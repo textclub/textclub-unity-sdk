@@ -30,6 +30,24 @@ namespace Textclub
             return JsBridge.GetPlayerValue(key);
         }
 
+        public bool TryGet(string key, out string value)
+        {
+            value = JsBridge.GetPlayerValue(key);
+            return string.IsNullOrEmpty(value);
+        }
+
+        public bool TryGet<T>(string key, out T value)
+        {
+            value = default;
+            if (TryGet(key, out string val))
+            {
+                value = Convert.FromString<T>(val);
+                return true;
+            }
+
+            return false;
+        }
+
         public T Get<T>(string key)
         {
             var str = JsBridge.GetPlayerValue(key);
