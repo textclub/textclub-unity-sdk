@@ -41,13 +41,30 @@ mergeInto(LibraryManager.library, {
             });
     },
 
-    JS_testAsync: function (taskPtr, successCallback, errorCallback) {
-        new Promise(resolve => setTimeout(resolve, 1000)).then(function () {
-            {{{ makeDynCall('vi', 'successCallback') }}} (taskPtr);
+    JS_callAsyncVoid: function (taskPtr, callName, successCallback, errorCallback) {
+        window.textclubSdk[UTF8ToString(callName)].then(function () {
+            { { { makeDynCall('vi', 'successCallback') } } } (taskPtr);
         })
             .catch(function (error) {
-                {{{ makeDynCall('vii', 'errorCallback') }}} (taskPtr, marshalString(error));
+                { { { makeDynCall('vii', 'errorCallback') } } } (taskPtr, marshalString(error));
+            });
+    },
+
+    JS_callAsyncNumber: function (taskPtr, callName, successCallback, errorCallback) {
+        window.textclubSdk[UTF8ToString(callName)].then(function (result) {
+            { { { makeDynCall('vif', 'successCallback') } } } (taskPtr, result);
+        })
+            .catch(function (error) {
+                { { { makeDynCall('vii', 'errorCallback') } } } (taskPtr, marshalString(error));
+            });
+    },
+
+    JS_callAsyncString: function (taskPtr, callName, successCallback, errorCallback) {
+        window.textclubSdk[UTF8ToString(callName)].then(function (result) {
+            { { { makeDynCall('vii', 'successCallback') } } } (taskPtr, result);
+        })
+            .catch(function (error) {
+                { { { makeDynCall('vii', 'errorCallback') } } } (taskPtr, marshalString(error));
             });
     }
-
 });

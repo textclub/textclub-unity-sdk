@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using AOT;
@@ -28,7 +27,15 @@ namespace Textclub
         private static extern void JS_captureEvent(string eventName, string properties);
 
         [DllImport("__Internal")]
-        private static extern void JS_testAsync(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
+        private static extern void JS_callAsyncVoid(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
+                                         System.Action<System.IntPtr, string> errorCallback);
+
+        [DllImport("__Internal")]
+        private static extern void JS_callAsyncString(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
+                                         System.Action<System.IntPtr, string> errorCallback);
+
+        [DllImport("__Internal")]
+        private static extern void JS_callAsyncNumber(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
                                          System.Action<System.IntPtr, string> errorCallback);
 
         [DllImport("__Internal")]
@@ -47,7 +54,15 @@ namespace Textclub
 
         private static void JS_captureEvent(string eventName, string properties) { _bridgeMock.CaptureEvent(eventName, properties); }
 
-        private static void JS_testAsync(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
+        private static void JS_callAsyncNumber(System.IntPtr ptr, string call, System.Action<System.IntPtr, float> successCallback,
+                                         System.Action<System.IntPtr, string> errorCallback)
+        { successCallback(ptr, 0); }
+
+        private static void JS_callAsyncString(System.IntPtr ptr, string call, System.Action<System.IntPtr, string> successCallback,
+                                         System.Action<System.IntPtr, string> errorCallback)
+        { successCallback(ptr, ""); }
+
+        private static void JS_callAsyncVoid(System.IntPtr ptr, string call, System.Action<System.IntPtr> successCallback,
                                          System.Action<System.IntPtr, string> errorCallback)
         { successCallback(ptr); }
 
@@ -117,9 +132,46 @@ namespace Textclub
             return new TextclubTask((System.IntPtr ptr) => { JS_initSdk(ptr, HandleSuccess, HandleError); });
         }
 
-        internal static TextclubTask TestAsync()
+        internal static TextclubTask CallAsyncVoid(string call)
         {
-            return new TextclubTask((System.IntPtr ptr) => { JS_testAsync(ptr, HandleSuccess, HandleError); });
+            return new TextclubTask((System.IntPtr ptr) => { JS_callAsyncVoid(ptr, call, HandleSuccess, HandleError); });
+        }
+
+        internal static TextclubTask<float> CallAsyncNumber(string call)
+        {
+            return new TextclubTask<float>((System.IntPtr ptr) =>
+                            { JS_callAsyncNumber(ptr, call, HandleSuccessNumber, HandleErrorNumber); });
+        }
+
+        internal static TextclubTask<string> CallAsyncString(string call)
+        {
+            return new TextclubTask<string>((System.IntPtr ptr) =>
+                            { JS_callAsyncString(ptr, call, HandleSuccessString, HandleErrorString); });
+        }
+
+        [MonoPInvokeCallback(typeof(System.Action<System.IntPtr, float>))]
+        public static void HandleSuccessNumber(System.IntPtr taskPtr, float result) => HandleSuccess(taskPtr, result);
+
+
+        [MonoPInvokeCallback(typeof(System.Action<System.IntPtr, string>))]
+        public static void HandleSuccessString(System.IntPtr taskPtr, string result) => HandleSuccess(taskPtr, result);
+
+
+        [MonoPInvokeCallback(typeof(System.Action<System.IntPtr, string>))]
+        public static void HandleErrorNumber(System.IntPtr taskPtr, string error) => HandleError<float>(taskPtr, error);
+
+
+        [MonoPInvokeCallback(typeof(System.Action<System.IntPtr, string>))]
+        public static void HandleErrorString(System.IntPtr taskPtr, string error) => HandleError<string>(taskPtr, error);
+
+
+        [MonoPInvokeCallback(typeof(System.Action<System.IntPtr, string>))]
+        public static void HandleError(System.IntPtr taskPtr, string error)
+        {
+            GCHandle handle = GCHandle.FromIntPtr(taskPtr);
+            var task = (TextclubTask)handle.Target;
+            task.SetException(new System.Exception(error));
+            handle.Free();
         }
 
         [MonoPInvokeCallback(typeof(System.Action<System.IntPtr>))]
@@ -131,13 +183,21 @@ namespace Textclub
             handle.Free();
         }
 
-        [MonoPInvokeCallback(typeof(System.Action<System.IntPtr, string>))]
-        public static void HandleError(System.IntPtr taskPtr, string error)
+        public static void HandleSuccess<T>(System.IntPtr taskPtr, T result)
         {
             GCHandle handle = GCHandle.FromIntPtr(taskPtr);
-            var task = (TextclubTask)handle.Target;
+            var task = (TextclubTask<T>)handle.Target;
+            task.SetResult(result);
+            handle.Free();
+        }
+
+        public static void HandleError<T>(System.IntPtr taskPtr, string error)
+        {
+            GCHandle handle = GCHandle.FromIntPtr(taskPtr);
+            var task = (TextclubTask<T>)handle.Target;
             task.SetException(new System.Exception(error));
             handle.Free();
         }
+
     }
 }
