@@ -13,12 +13,7 @@ namespace Textclub
 
         public TextclubTask Init()
         {
-            return JsBridge.Init();
-        }
-
-        public TextclubTask TestAsync()
-        {
-            return JsBridge.TestAsync();
+            return JsBridge.CallAsyncVoid("isReady");
         }
     }
 }

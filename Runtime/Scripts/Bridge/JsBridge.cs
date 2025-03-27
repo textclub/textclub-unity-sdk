@@ -27,15 +27,15 @@ namespace Textclub
         private static extern void JS_captureEvent(string eventName, string properties);
 
         [DllImport("__Internal")]
-        private static extern void JS_callAsyncVoid(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
+        private static extern void JS_callAsyncVoid(System.IntPtr ptr, string call, System.Action<System.IntPtr> successCallback,
                                          System.Action<System.IntPtr, string> errorCallback);
 
         [DllImport("__Internal")]
-        private static extern void JS_callAsyncString(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
+        private static extern void JS_callAsyncString(System.IntPtr ptr, string call, System.Action<System.IntPtr, string> successCallback,
                                          System.Action<System.IntPtr, string> errorCallback);
 
         [DllImport("__Internal")]
-        private static extern void JS_callAsyncNumber(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
+        private static extern void JS_callAsyncNumber(System.IntPtr ptr, string call, System.Action<System.IntPtr, float> successCallback,
                                          System.Action<System.IntPtr, string> errorCallback);
 
         [DllImport("__Internal")]
