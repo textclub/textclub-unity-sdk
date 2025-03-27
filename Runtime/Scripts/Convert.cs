@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Textclub
@@ -11,6 +15,10 @@ namespace Textclub
             {
                 return obj.ToString();
             }
+            else if (obj is Dictionary<string, object>)
+            {
+                return JsonConvert.SerializeObject(obj);
+            }
             else
             {
                 return JsonUtility.ToJson(obj);
@@ -20,7 +28,6 @@ namespace Textclub
         public static T FromString<T>(string value)
         {
             System.Type type = typeof(T);
-            Debug.Log(type);
             return type switch
             {
                 System.Type t when t == typeof(int) => (T)(object)int.Parse(value),
@@ -30,6 +37,7 @@ namespace Textclub
                 System.Type t when t == typeof(Vector3) => (T)(object)ParseVector3(value),
                 System.Type t when t == typeof(Vector2) => (T)(object)ParseVector2(value),
                 System.Type t when t == typeof(string) => (T)(object)value,
+                System.Type t when t == typeof(Dictionary<string, object>) => (T)(object)DeserializeDictionary(value),
                 _ => JsonUtility.FromJson<T>(value)
             };
         }
@@ -58,5 +66,21 @@ namespace Textclub
 
             return System.Array.ConvertAll(components, (string comp) => float.Parse(comp));
         }
+
+        private static Dictionary<string, object> DeserializeDictionary(string json)
+        {
+            var result = JsonConvert.DeserializeObject(json, typeof(Dictionary<string, object>)) as
+             Dictionary<string, object>;
+            foreach (var key in result.Keys.ToList())
+            {
+                var value = result[key];
+                if (value is JObject)
+                {
+                    result[key] = DeserializeDictionary(((JObject)value).ToString());
+                }
+            }
+            return result;
+        }
+
     }
 }

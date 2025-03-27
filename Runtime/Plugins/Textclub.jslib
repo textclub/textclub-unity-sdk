@@ -24,6 +24,7 @@ mergeInto(LibraryManager.library, {
         let opts = JSON.parse(UTF8ToString(options));
 
         opts.scheduledAt = new Date(opts.scheduledAt);
+        opts.metadata = JSON.parse(opts.metadata);
 
         window.textclubSdk.scheduleNotification(opts);
     },
