@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace Textclub
 {
+    /// <summary>
+    /// A scriptable object that implements IBridgeMock for testing and debugging purposes.
+    /// Allows mocking of player data, events, and notifications in the Unity Editor.
+    /// </summary>
     [CreateAssetMenu(fileName = "ScriptableMock", menuName = "Textclub/ScriptableMock")]
     public class ScriptableMock : ScriptableObject, IBridgeMock
     {
@@ -13,33 +17,41 @@ namespace Textclub
         [SerializeField] private List<ValuePair> _values;
         [SerializeField] private List<ValuePair> _events;
 
+        /// <summary>
+        /// Gets the unique identifier for the player.
+        /// </summary>
         public string playerId => _playerId;
 
+        /// <summary>
+        /// Gets whether the player is registered as a string representation.
+        /// </summary>
         public string isRegistered => _isRegistered.ToString();
 
-#if UNITY_EDITOR
-        private void OnEnable()
-        {
-            Debug.Log("OnEnable");
-            JsBridge.SetMock(this);
-        }
-
-        private void OnDisable()
-        {
-            Debug.Log("OnEnable");
-            JsBridge.SetMock(this);
-        }
-#endif
+        /// <summary>
+        /// Captures an event with the specified name and properties.
+        /// </summary>
+        /// <param name="eventName">The name of the event to capture.</param>
+        /// <param name="properties">The properties associated with the event in JSON format.</param>
         public void CaptureEvent(string eventName, string properties)
         {
             _events.Add(new ValuePair { key = eventName, value = properties });
         }
 
+        /// <summary>
+        /// Retrieves a player value by its key.
+        /// </summary>
+        /// <param name="key">The key of the value to retrieve.</param>
+        /// <returns>The value associated with the specified key.</returns>
         public string GetPlayerValue(string key)
         {
             return _values.Find(vp => vp.key == key).value;
         }
 
+        /// <summary>
+        /// Sets a player value with the specified key.
+        /// </summary>
+        /// <param name="key">The key of the value to set.</param>
+        /// <param name="value">The value to store.</param>
         public void SetPlayerValue(string key, string value)
         {
             int index = _values.FindIndex(vp => vp.key == key);
@@ -54,25 +66,57 @@ namespace Textclub
             }
         }
 
+        /// <summary>
+        /// Schedules a notification using the provided options.
+        /// </summary>
+        /// <param name="options">The notification options in JSON format.</param>
         public void ScheduleNotification(string options)
         {
             _notifications.Add(JsonUtility.FromJson<Notifications.Options>(options));
         }
 
+        /// <summary>
+        /// Retrieves the properties of an event by its name.
+        /// </summary>
+        /// <param name="eventName">The name of the event to retrieve.</param>
+        /// <returns>The properties of the event in JSON format.</returns>
         public string GetEvent(string eventName)
         {
             return _events.Find(e => e.key == eventName).value;
         }
 
+        /// <summary>
+        /// Gets all scheduled notifications.
+        /// </summary>
+        /// <returns>A list of notification options in JSON format.</returns>
         public List<string> GetNotifications()
         {
             return _notifications.Select(n => JsonUtility.ToJson(n)).ToList();
         }
 
+#if UNITY_EDITOR
+        private void OnEnable()
+        {
+            Debug.Log("OnEnable");
+            JsBridge.SetMock(this);
+        }
+
+        private void OnDisable()
+        {
+            Debug.Log("OnEnable");
+            JsBridge.SetMock(this);
+        }
+#endif
+
+        /// <summary>
+        /// Represents a key-value pair for storing player values and events.
+        /// </summary>
         [System.Serializable]
         public struct ValuePair
         {
+            /// <summary>The key of the pair.</summary>
             public string key;
+            /// <summary>The value of the pair.</summary>
             public string value;
         }
     }
