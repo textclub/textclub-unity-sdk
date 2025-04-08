@@ -3,7 +3,9 @@
     "version": "1.0.0",
     "displayName": "Textclub SDK",
     "description": "A Unity wrapper for integrating the Textclub SDK into a project.",
-    "unity": "2019.1",
+    "unity": "6000.0",
     "unityRelease": "0f1",
-    "dependencies": {}
+    "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+    }
 }
