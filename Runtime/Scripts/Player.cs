@@ -33,7 +33,7 @@ namespace Textclub
         public bool TryGet(string key, out string value)
         {
             value = JsBridge.GetPlayerValue(key);
-            return string.IsNullOrEmpty(value);
+            return !string.IsNullOrEmpty(value);
         }
 
         public bool TryGet<T>(string key, out T value)

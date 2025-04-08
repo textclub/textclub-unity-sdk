@@ -26,7 +26,11 @@ namespace Textclub
 
         public string GetPlayerValue(string key)
         {
-            return _playerValues[key];
+            if (_playerValues.TryGetValue(key, out var value))
+            {
+                return value;
+            }
+            return "";
         }
 
         public void ScheduleNotification(string options)
@@ -41,7 +45,12 @@ namespace Textclub
 
         public string GetEvent(string eventName)
         {
-            return _events[eventName];
+            if (_events.TryGetValue(eventName, out var evnt))
+            {
+                return evnt;
+            }
+
+            return "";
         }
 
         public List<string> GetNotifications()
