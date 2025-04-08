@@ -15,16 +15,6 @@ A Unity package that provides seamless integration with the Textclub platform fo
 2. Click the "+" button and select "Add package from git URL"
 3. Enter: `https://github.com/textclub/textclub-unity-sdk.git`
 
-Or add the following to your `manifest.json`:
-
-```json
-{
-  "dependencies": {
-    "com.textclub.sdk": "1.0.0"
-  }
-}
-```
-
 ## Examples
 
 ### Player Data Management
