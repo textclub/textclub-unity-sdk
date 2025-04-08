@@ -47,6 +47,19 @@ namespace Textclub.Tests
         }
 
         [Test]
+        public void Player_TryGet_ReturnsCorretValue()
+        {
+            const string key = "key";
+            const string value = "value";
+            const string anotherKey = "anotherKey";
+
+            _textclub.player.Set(key, value);
+
+            Assert.That(_textclub.player.TryGet(key, out string val) && val == value);
+            Assert.That(!_textclub.player.TryGet(anotherKey, out string anotherVal));
+        }
+
+        [Test]
         public void Player_SetAndGetValue_WorksWithVectors()
         {
             var vector2 = new Vector2(1, 2);
