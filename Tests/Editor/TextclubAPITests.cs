@@ -1,10 +1,11 @@
 using NUnit.Framework;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 namespace Textclub.Tests
 {
-    public class TextclubTests
+    public class TextclubAPITests
     {
         private Textclub _textclub;
         private TestBridgeMock _mock;
@@ -70,6 +71,18 @@ namespace Textclub.Tests
         }
 
         [Test]
+        public void Analytics_CaptureEvent_StoresEventData_Dictionary()
+        {
+            var eventName = "test-event";
+            var eventData = new Dictionary<string, object> { { "stringValue", "test" }, { "numberValue", 42 } };
+            _textclub.analytics.CaptureEvent(eventName, eventData);
+
+            var parsedData = _textclub.analytics.GetEvent(eventName);
+
+            Assert.AreEqual(eventData, parsedData);
+        }
+
+        [Test]
         public void Notifications_ScheduleNotification_StoresNotification()
         {
             var date = DateTime.Now;
@@ -78,7 +91,8 @@ namespace Textclub.Tests
                 message = "Test notification",
                 date = date,
                 deduplicationKey = "test-key",
-                attemptPushNotification = true
+                attemptPushNotification = true,
+                data = { { "stringValue", "test" }, { "numberValue", 42 } }
             };
 
             _textclub.notifications.ScheduleNotification(options);
@@ -90,6 +104,7 @@ namespace Textclub.Tests
             Assert.AreEqual(options.attemptPushNotification, result.attemptPushNotification);
             Assert.AreEqual(options.deduplicationKey, result.deduplicationKey);
             Assert.AreEqual(options.date, result.date);
+            Assert.AreEqual(options.data, result.data);
             Assert.AreEqual(options.message, result.message);
         }
 
