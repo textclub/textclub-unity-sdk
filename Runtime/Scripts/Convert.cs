@@ -6,8 +6,17 @@ using UnityEngine;
 
 namespace Textclub
 {
+    /// <summary>
+    /// Provides utility methods for converting between different data types and their string representations.
+    /// </summary>
     public static class Convert
     {
+        /// <summary>
+        /// Converts an object to its string representation based on its type.
+        /// </summary>
+        /// <typeparam name="T">The type of object to convert.</typeparam>
+        /// <param name="obj">The object to convert to a string.</param>
+        /// <returns>A string representation of the object.</returns>
         public static string ToString<T>(T obj)
         {
             var type = typeof(T);
@@ -25,6 +34,12 @@ namespace Textclub
             }
         }
 
+        /// <summary>
+        /// Converts a string value to a specified type.
+        /// </summary>
+        /// <typeparam name="T">The type to convert the string to.</typeparam>
+        /// <param name="value">The string value to convert.</param>
+        /// <returns>The converted value of type T.</returns>
         public static T FromString<T>(string value)
         {
             System.Type type = typeof(T);
