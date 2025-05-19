@@ -4,7 +4,7 @@ A Unity package that provides seamless integration with the Textclub platform fo
 
 ## Features
 
-- **Player Management**: Easily store and retrieve player data 
+- **Player Management**: Easily store and retrieve player data
 - **Analytics**: Track in-game events and player behavior
 - **Notifications**: Schedule in-game and push notifications
 - **Mock System**: Built-in mocking capabilities for testing
@@ -20,13 +20,13 @@ A Unity package that provides seamless integration with the Textclub platform fo
 ### Player Data Management
 
 #### Getting Player Data
+
 ```csharp
 var player = new Textclub.Player();
 
 // Basic player info
 string playerId = player.id;
 bool isRegistered = player.isRegistered;
-string playerEmail = player.email;
 
 // Custom struct example
 public struct PlayerStats
@@ -63,6 +63,7 @@ player.Set("stats", new PlayerStats {
 ### Analytics Events
 
 #### Basic Events
+
 ```csharp
 var analytics = new Textclub.Analytics();
 
@@ -79,6 +80,7 @@ analytics.CaptureEvent("item_purchased", new Dictionary<string, object> {
 ```
 
 #### Structured Events
+
 ```csharp
 // Define event structure
 public struct LevelCompleteEvent
@@ -120,7 +122,7 @@ The SDK includes a ScriptableObject-based mock system for testing in the Unity E
 
 ### Creating a Mock Configuration
 
-1. In your Project window, right-click and select:  
+1. In your Project window, right-click and select:
    `Create > Textclub > Mock`
 
 2. Name your configuration (e.g. "TextclubMock")
@@ -133,19 +135,13 @@ The SDK includes a ScriptableObject-based mock system for testing in the Unity E
    - Toggle registered/unregistered state
 
 This is especially useful for:
+
 - Debugging player progression
 - Verifying analytics event data
 - Testing notification scheduling
 - Simulating different player scenarios
 
 The mock configuration persists in edit mode, allowing you to maintain test data between play sessions.
-
-## Build Configuration
-
-Add one of these defines to your project's scripting define symbols:
-
-- `TEXTCLUB_SDK` - Use production SDK
-- `TEXTCLUB_SDK_MOCK` - Use mock SDK for testing using the emulator at https://a.messagedisco.com/
 
 ## Requirements and dependencies
 

@@ -12,19 +12,12 @@ public class AutoInitPreprocessor : IPreprocessBuildWithReport
 
     internal static readonly string initProductionAsset = $"Packages/{packageName}/Runtime/Init/init.js";
 
-    internal static readonly string initMockAsset = $"Packages/{packageName}/Runtime/Init/initMock.js";
-
     internal static readonly string assetDestination = $"Assets/{packageName}/init.jspre";
 
     public void OnPreprocessBuild(BuildReport _)
     {
         RemoveInitScriptIfExists();
-
-#if TEXTCLUB_SDK
         CopyInitScript(initProductionAsset);
-#elif TEXTCLUB_SDK_MOCK
-        CopyInitScript(initMockAsset);
-#endif
     }
 
     internal static void CopyInitScript(string from)
