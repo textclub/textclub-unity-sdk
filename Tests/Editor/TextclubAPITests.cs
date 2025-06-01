@@ -72,6 +72,22 @@ namespace Textclub.Tests
             Assert.That(_textclub.player.Get<Vector3>("vector3"), Is.EqualTo(vector3));
         }
 
+        [Test]
+        public void GetEntryPayload_ReturnsCorrectValue()
+        {
+            var expectedPayload = new Dictionary<string, object>
+            {
+                { "key1", "value1" },
+                { "key2", 42 }
+            };
+            _mock.SetEntryPayload(expectedPayload);
+
+            var actualPayload = _textclub.GetEntryPayload();
+
+            Assert.That(actualPayload, Is.EqualTo(expectedPayload));
+        }
+
+        [Test]
         public void Analytics_CaptureEvent_StoresEventData()
         {
             var eventName = "test-event";
