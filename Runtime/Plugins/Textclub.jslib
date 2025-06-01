@@ -2,8 +2,12 @@ mergeInto(LibraryManager.library, {
 
     JS_getPlayerId: function () {
         const val = window.textclubSdk.getPlayer().playerId;
-        console.log(val);
         return marshalString(val);
+    },
+
+    JS_getEntryPayload: function () {
+        const payload = window.textclubSdk.getEntryPayload();
+        return marshalString(JSON.stringify(payload));
     },
 
     JS_getIsRegistered: function () {
