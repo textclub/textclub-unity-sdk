@@ -8,10 +8,11 @@ namespace Textclub
     /// </summary>
     public class TestBridgeMock : IBridgeMock
     {
-
         private Dictionary<string, string> _events = new();
         private Dictionary<string, string> _playerValues = new();
         private List<string> _notifications = new();
+
+        private string _entryPayload;
 
         /// <summary>
         /// Gets the unique identifier for the player.
@@ -99,6 +100,24 @@ namespace Textclub
         public List<string> GetNotifications()
         {
             return _notifications;
+        }
+
+        /// <summary>
+        /// Game-specific entry payload, that was used to launch the game.
+        /// </summary>
+        /// <returns>A map of strings->objects</returns>
+        public string GetEntryPayload()
+        {
+            return _entryPayload;
+        }
+
+        /// <summary>
+        /// Sets Game-specific entry payload.
+        /// </summary>
+        /// <param name="payload">A string-object map containing the payload.</param>
+        public void SetEntryPayload(Dictionary<string, object> payload)
+        {
+            _entryPayload = Convert.ToString(payload);
         }
     }
 }

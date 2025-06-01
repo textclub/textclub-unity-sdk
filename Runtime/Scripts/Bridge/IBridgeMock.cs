@@ -18,6 +18,7 @@ namespace Textclub
         /// </summary>
         string isRegistered { get; }
 
+
         /// <summary>
         /// Retrieves a stored player value by its key.
         /// </summary>
@@ -57,5 +58,17 @@ namespace Textclub
         /// </summary>
         /// <returns>A list of notifications as JSON strings</returns>
         List<string> GetNotifications();
+
+        /// <summary>
+        /// Game-specific entry payload, that was used to launch the game.
+        /// </summary>
+        /// <returns>A map of strings->objects</returns>
+        string GetEntryPayload();
+
+        /// <summary>
+        /// Sets Game-specific entry payload.
+        /// </summary>
+        /// <param name="payload">A string-object map containing the payload.</param>
+        void SetEntryPayload(Dictionary<string, object> payload);
     }
 }

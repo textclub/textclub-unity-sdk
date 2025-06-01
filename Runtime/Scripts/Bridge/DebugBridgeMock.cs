@@ -88,5 +88,23 @@ namespace Textclub
         {
             return new List<string>();
         }
+
+        /// <summary>
+        /// Game-specific entry payload, that was used to launch the game.
+        /// </summary>
+        /// <returns>A map of strings->objects</returns>
+        public string GetEntryPayload()
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// Sets Game-specific entry payload.
+        /// </summary>
+        /// <param name="payload">A string-object map containing the payload.</param>
+        public void SetEntryPayload(Dictionary<string, object> payload)
+        {
+            Debug.Log($"[Textclub] SetEntryPayload {Convert.ToString(payload)}");
+        }
     }
 }

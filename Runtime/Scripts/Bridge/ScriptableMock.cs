@@ -8,7 +8,7 @@ namespace Textclub
     /// A scriptable object that implements IBridgeMock for testing and debugging purposes.
     /// Allows mocking of player data, events, and notifications in the Unity Editor.
     /// </summary>
-    [CreateAssetMenu(fileName = "ScriptableMock", menuName = "Textclub/ScriptableMock")]
+    [CreateAssetMenu(fileName = "TextclubMock", menuName = "Textclub/Mock")]
     public class ScriptableMock : ScriptableObject, IBridgeMock
     {
         [SerializeField] private string _playerId;
@@ -16,6 +16,7 @@ namespace Textclub
         [SerializeField] private List<Notifications.Options> _notifications;
         [SerializeField] private List<ValuePair> _values;
         [SerializeField] private List<ValuePair> _events;
+        [SerializeField] private List<ValuePair> _entryPayload;
 
         /// <summary>
         /// Gets the unique identifier for the player.
@@ -92,6 +93,33 @@ namespace Textclub
         public List<string> GetNotifications()
         {
             return _notifications.Select(n => JsonUtility.ToJson(n)).ToList();
+        }
+
+        /// <summary>
+        /// Game-specific entry payload, that was used to launch the game.
+        /// </summary>
+        /// <returns>A map of strings->objects</returns>
+        public string GetEntryPayload()
+        {
+            var result = new Dictionary<string, object>();
+            foreach (var pair in _entryPayload)
+            {
+                result.Add(pair.key, pair.value);
+            }
+
+            return Convert.ToString(result);
+        }
+
+        /// <summary>
+        /// Sets Game-specific entry payload.
+        /// </summary>
+        /// <param name="payload">A string-object map containing the payload.</param>
+        public void SetEntryPayload(Dictionary<string, object> payload)
+        {
+            foreach (var pair in payload)
+            {
+                _entryPayload.Add(new ValuePair { key = pair.Key, value = pair.Value.ToString() });
+            }
         }
 
 #if UNITY_EDITOR
