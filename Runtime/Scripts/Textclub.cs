@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -30,6 +31,12 @@ namespace Textclub
         public TextclubTask Init()
         {
             return JsBridge.CallAsyncVoid("isReady");
+        }
+
+        public Dictionary<string, object> GetEntryPayload()
+        {
+            string payloadString = JsBridge.GetEntryPayload();
+            return Convert.FromString<Dictionary<string, object>>(payloadString);
         }
     }
 }

@@ -1,13 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using AOT;
-using UnityEngine;
 
 namespace Textclub
 {
     internal static class JsBridge
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
+
+        [DllImport("__Internal")]
+        private static extern string JS_getEntryPayload();
+
         [DllImport("__Internal")]
         private static extern string JS_getPlayerId();
 
@@ -42,6 +46,8 @@ namespace Textclub
         private static extern void JS_initSdk(System.IntPtr ptr, System.Action<System.IntPtr> successCallback,
                                          System.Action<System.IntPtr, string> errorCallback);
 #else
+        private static string JS_getEntryPayload() { return _bridgeMock.GetEntryPayload(); }
+
         private static string JS_getPlayerId() { return _bridgeMock.playerId; }
 
         private static string JS_getIsRegistered() { return _bridgeMock.isRegistered; }
@@ -85,6 +91,11 @@ namespace Textclub
             {
                 _bridgeMock = new DebugBridgeMock("playerId", true);
             }
+        }
+
+        internal static string GetEntryPayload()
+        {
+            return JS_getEntryPayload();
         }
 
         internal static string GetPlayerId()
@@ -198,6 +209,5 @@ namespace Textclub
             task.SetException(new System.Exception(error));
             handle.Free();
         }
-
     }
 }
