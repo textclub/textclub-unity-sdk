@@ -20,7 +20,7 @@ A Unity package that provides seamless integration with the Textclub platform fo
 ### Entry Payload
 
 Session can have payloads associated with them to provide additional context.
-They are serialized into JSON and deliever as JSON from the platform.
+They are serialized into JSON and delivered as JSON from the platform.
 
 The `GetEntryPayload` method fetches and returns the payload as Dictionary<string, object>.
 
