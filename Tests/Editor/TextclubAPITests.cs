@@ -47,7 +47,7 @@ namespace Textclub.Tests
         }
 
         [Test]
-        public void Player_TryGet_ReturnsCorretValue()
+        public void Player_TryGet_ReturnsCorrectValue()
         {
             const string key = "key";
             const string value = "value";
