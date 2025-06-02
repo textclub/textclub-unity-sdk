@@ -33,6 +33,22 @@ namespace Textclub
             return JsBridge.CallAsyncVoid("isReady");
         }
 
+        /// <summary>
+        /// Retrieves the entry payload data associated with the current session entry.
+        ///
+        /// It may contain data passed from an onboarding to a game or referral data from another entry.
+        /// </summary>
+        /// <returns>A dictionary containing the entry payload data</returns>
+        /// <example>
+        /// <code>
+        ///     var textclub = new Textclub();
+        ///     var entryPayload = textclub.GetEntryPayload();
+        ///     if (entryPayload.TryGetValue("petName", out var petName))
+        ///     {
+        ///         Debug.Log($"Pet name: {petName}");
+        ///     }
+        /// </code>
+        /// </example>
         public Dictionary<string, object> GetEntryPayload()
         {
             string payloadString = JsBridge.GetEntryPayload();

@@ -17,6 +17,22 @@ A Unity package that provides seamless integration with the Textclub platform fo
 
 ## Examples
 
+### Entry Payload
+
+Session can have payloads associated with them to provide additional context.
+They are serialized into JSON and delivered as JSON from the platform.
+
+The `GetEntryPayload` method fetches and returns the payload as Dictionary<string, object>.
+
+```csharp
+var textclub = new Textclub();
+var entryPayload = textclub.GetEntryPayload();
+if (entryPayload.TryGetValue("key", out var value))
+{
+    // Do something with the value
+}
+```
+
 ### Player Data Management
 
 #### Getting Player Data
